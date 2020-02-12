@@ -12,18 +12,19 @@ router.post('/', validateUser, (req, res) => {
   })
   .catch(err => {
     console.log(err);
-    res.status(500).json({Error: err.message})
+    res.status(500).json({error: err.message})
   })
 });
 
 router.post('/:id/posts', validateUserId, validatePost, (req, res) => {
-  Posts.insert(req.body)
+  const postInfo = {...req.body, user_id: req.params.id}
+  Posts.insert(postInfo)
   .then(post => {
     res.status(201).json(post)
   })
   .catch(err => {
     console.log(err);
-    res.status(500).json({Error: err.message})
+    res.status(500).json({error: err.message})
   })
 });
 
@@ -34,7 +35,7 @@ router.get('/', (req, res) => {
   })
   .catch(err => {
     console.log(err);
-    res.status(500).json({Error: err.message})
+    res.status(500).json({error: err.message})
   })
 });
 
@@ -44,12 +45,12 @@ router.get('/:id', validateUserId, (req, res) => {
     if (user) {
       res.status(200).json(user)
     } else {
-      res.status(404).json({Error: err.message})
+      res.status(404).json({error: err.message})
     }
   })
   .catch(err => {
     console.log(err);
-    res.status(500).json({Error: err.message})
+    res.status(500).json({error: err.message})
   })
 });
 
@@ -60,7 +61,7 @@ router.get('/:id/posts', (req, res) => {
   })
   .catch(err => {
     console.log(err);
-
+    res.status(500).json({error: err.message})
   })
 });
 
@@ -70,7 +71,7 @@ router.delete('/:id', validateUserId, (req, res) => {
     res.status(200).json(user)
   })
   .catch(err => {
-    res.status(500).json({Error: err.messsage})
+    res.status(500).json({error: err.messsage})
   })
 });
 
@@ -81,7 +82,7 @@ router.put('/:id', validateUser, (req, res) => {
   })
   .catch(err => {
     console.log(err);
-    res.status(500).json({Error: err.message})
+    res.status(500).json({error: err.message})
   })
 });
 
@@ -91,27 +92,27 @@ function validateUserId(req, res, next) {
     req.user = req.params.id;
     next();
   } else {
-    res.status(400).json({Error: res.message})
+    res.status(400).json({message: "Invalid user id"})
   }
 }
 
 function validateUser(req, res, next) {
-  if(req.body) {
+  if(req.body && req.body.name) {
     next()
   } else if (req.body && !req.body.name) {
-    res.status(400).json({Error: res.message})
+    res.status(400).json({message: "Missing required field name"})
   } else {
-    res.status(400).json({Error: res.message})
+    res.status(400).json({message: "Missing user data"})
   }
 }
 
 function validatePost(req, res, next) {
-  if(req.body) {
+  if(req.body && req.body.text) {
     next()
   } else if (req.body && !req.body.text) {
-    res.status(400).json({Error: res.message})
+    res.status(400).json({message: "Missing required text field"})
   } else {
-    res.status(400).json({Error: res.message})
+    res.status(400).json({message: "Missing post data"})
   }
 }
 
