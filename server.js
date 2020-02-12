@@ -21,7 +21,7 @@ server.get('/', (req, res) => {
 
 function logger(req, res, next) {
   const timestamp = Date.now()
-  console.log(`${req.method} Request to ${req.originalUrl} at ${timesstamp}`)
+  console.log(`${req.method} Request to ${req.originalUrl} at ${timestamp}`)
   next();
 }
 
@@ -38,6 +38,16 @@ function validateUser(req, res, next) {
   if(req.body) {
     next()
   } else if (req.body && !req.body.name) {
+    res.status(400).json({Error: res.message})
+  } else {
+    res.status(400).json({Error: res.message})
+  }
+}
+
+function validatePost(req, res, next) {
+  if(req.body) {
+    next()
+  } else if (req.body && !req.body.text) {
     res.status(400).json({Error: res.message})
   } else {
     res.status(400).json({Error: res.message})

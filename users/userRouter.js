@@ -33,17 +33,33 @@ router.put('/:id', (req, res) => {
 });
 
 //custom middleware
-
 function validateUserId(req, res, next) {
-  // do your magic!
+  if(req.id) {
+    req.user = req.id;
+    next();
+  } else {
+    res.status(400).json({Error: res.message})
+  }
 }
 
 function validateUser(req, res, next) {
-  // do your magic!
+  if(req.body) {
+    next()
+  } else if (req.body && !req.body.name) {
+    res.status(400).json({Error: res.message})
+  } else {
+    res.status(400).json({Error: res.message})
+  }
 }
 
 function validatePost(req, res, next) {
-  // do your magic!
+  if(req.body) {
+    next()
+  } else if (req.body && !req.body.text) {
+    res.status(400).json({Error: res.message})
+  } else {
+    res.status(400).json({Error: res.message})
+  }
 }
 
-module.exports = router;
+module.exports = router, validateUserId, validateUser, validatePost;
