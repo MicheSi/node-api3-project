@@ -1,12 +1,17 @@
 import React from 'react';
-import { Card, Button, CardTitle, CardText } from 'reactstrap';
+import { Card, Button, CardTitle } from 'reactstrap';
 
 const UserCard = props => {
+    const onClick = e => {
+        e.preventDefault();
+        window.location.href = `/users/${props.id}`
+    }
+
     return (
         <div className='userCard'>
             <Card body>
             <CardTitle>{props.name}</CardTitle>
-            <Button>See More Details</Button>
+            <Button onClick={onClick}>See More</Button>
             </Card>
         </div>
     )
